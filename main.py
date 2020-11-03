@@ -1,6 +1,6 @@
 import pygame
 import time
-import thread
+import _thread
 import io
 import random
 
@@ -23,16 +23,18 @@ y = 320
 i = x
 j = y
 done = False
+shooting = False
 clock = pygame.time.Clock()
 
-def shoot(m, n):
-    i = m
-    j = n
+def shoot():
+    i = x
+    j = y
     shooting = True
     while shooting == True:
+        print ("a")
         screen.blit(imageBullet,(i, j))
         j -= 1
-        time.sleep(0.0007)
+        #time.sleep(0.0007)
         if j == 0:
             shooting = False
 
@@ -53,7 +55,7 @@ while not done:
 
     prob = int(random.random() * 100)
     if prob < 1:
-        thread.start_new_thread(enemy, (0,0))
+        _thread.start_new_thread(enemy, (0,0))
     freio = False
     pressed = pygame.key.get_pressed()
     if pressed[pygame.K_UP]:
@@ -65,7 +67,11 @@ while not done:
     if pressed[pygame.K_RIGHT]:
         x += 3
     if pressed[pygame.K_SPACE]:
-        thread.start_new_thread(shoot, (x, y))
+        #shoot ()
+        shooting = True
+        i = x
+        j = y
+    
     if freio == True:
         y += 1
     if x < 75:
@@ -79,6 +85,9 @@ while not done:
     pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(0, 0, 80, 380))
     pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(520, 0, 80, 380))
     pygame.draw.rect(screen, (0, 0, 255), pygame.Rect(80, 0, 440, 380))
+    if shooting == True:
+        screen.blit(imageBullet, (i, j))
+        j -= 15
     screen.blit(imagePlane,(x, y))
     pygame.display.flip()
     clock.tick(60)
