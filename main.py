@@ -1,6 +1,6 @@
 import pygame
 import time
-import thread
+import _thread
 import io
 import random
 
@@ -22,8 +22,20 @@ x = 280
 y = 320
 i = x
 j = y
+enemies=[]
 done = False
+
 clock = pygame.time.Clock()
+
+class Enemy:
+    def __init__(self,image,image_rect):
+        self.image = image
+        self.image_rect = image_rect
+        self.alive = True
+
+    
+
+
 
 def shoot(m, n):
     i = m
@@ -51,9 +63,18 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    prob = int(random.random() * 100)
+    pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(0, 0, 80, 380))
+    pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(520, 0, 80, 380))
+    pygame.draw.rect(screen, (0, 0, 255), pygame.Rect(80, 0, 440, 380))
+
+    prob = int(random.random() * 20)
     if prob < 1:
-        thread.start_new_thread(enemy, (0,0))
+         enemies.append(Enemy(imageEnemy,imageEnemy.rect()))
+
+    for enemy_rect in enemies:
+        enemy_rect.y+=5
+        screen.blit(imageEnemy,enemy_rect)
+
     freio = False
     pressed = pygame.key.get_pressed()
     if pressed[pygame.K_UP]:
@@ -65,7 +86,7 @@ while not done:
     if pressed[pygame.K_RIGHT]:
         x += 3
     if pressed[pygame.K_SPACE]:
-        thread.start_new_thread(shoot, (x, y))
+        _thread.start_new_thread(shoot, (x, y))
     if freio == True:
         y += 1
     if x < 75:
@@ -76,9 +97,7 @@ while not done:
         y += 3
     if y > 320:
         y -= 1
-    pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(0, 0, 80, 380))
-    pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(520, 0, 80, 380))
-    pygame.draw.rect(screen, (0, 0, 255), pygame.Rect(80, 0, 440, 380))
+    
     screen.blit(imagePlane,(x, y))
     pygame.display.flip()
     clock.tick(60)
