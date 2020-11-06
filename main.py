@@ -17,7 +17,10 @@ if imageEnemy == None:
     print("Erro ao carregar imagem")
 
 pygame.init()
-screen = pygame.display.set_mode((600, 380))
+
+height = 380
+width = 600
+screen = pygame.display.set_mode((width, height))
 x = 280
 y = 320
 i = x
@@ -48,7 +51,7 @@ def shoot(m, n):
         if j == 0:
             shooting = False
 
-def enemy(m, n):
+def enema(m, n):
     a = int(random.random() * 440)
     j = 0
     enemyLive = True
@@ -56,7 +59,6 @@ def enemy(m, n):
         screen.blit(imageEnemy,(a, j))
         j += 1
         time.sleep(0.01)
-
 
 while not done:
     for event in pygame.event.get():
@@ -67,13 +69,16 @@ while not done:
     pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(520, 0, 80, 380))
     pygame.draw.rect(screen, (0, 0, 255), pygame.Rect(80, 0, 440, 380))
 
-    prob = int(random.random() * 20)
+    prob = int(random.random() * 12)
     if prob < 1:
-         enemies.append(Enemy(imageEnemy,imageEnemy.rect()))
+         enemies.append(Enemy(imageEnemy,imageEnemy.get_rect(topleft=(random.randrange(80,490),0))))
 
-    for enemy_rect in enemies:
-        enemy_rect.y+=5
-        screen.blit(imageEnemy,enemy_rect)
+    
+    for enemy in enemies:
+        if enemy.alive is True:
+            print("a"+'\n')
+            enemy.image_rect.y+=5
+            screen.blit(enemy.image,enemy.image_rect)
 
     freio = False
     pressed = pygame.key.get_pressed()
