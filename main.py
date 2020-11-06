@@ -28,10 +28,24 @@ height = 380
 width = 600
 screen = pygame.display.set_mode((width, height))
 
-enemies=[]
+enemies=pygame.sprite.Group()
+bullets=pygame.sprite.Group()
 done = False
 
 clock = pygame.time.Clock()
+
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self,image, playerX, playerY):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = image
+        self.rect = image.get_rect(top = playerY, left = playerX)
+        self.alive = True
+
+    def update(self):
+        if self.rect.y > height:
+            self.alive = False
+        if self.alive == True:
+            self.rect.y -= 9
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,image):
@@ -41,7 +55,15 @@ class Enemy(pygame.sprite.Sprite):
         self.alive = True
 
     def update(self):
-        wdwwdw
+        if self.rect.y > height:
+            self.alive = False
+
+        if self.alive is True:
+            self.rect.y+=1
+            #screen.blit(enemy.image,enemy.rect)
+
+    #def update(self):
+        #wdwwdw
 
 class Player(pygame.sprite.Sprite):
     def __init__(self,playerImage,shotImage):
@@ -52,6 +74,9 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.centerx = width / 2
         self.rect.bottom = height - 30
+
+        self.shoot_delay = 250
+        self.last_shot = pygame.time.get_ticks()
 
     def update(self):
      
@@ -66,7 +91,14 @@ class Player(pygame.sprite.Sprite):
         self.rect.x -= 3
      if pressed[pygame.K_RIGHT]:
         self.rect.x += 3
-     # if pressed[pygame.K_SPACE]:    
+     if pressed[pygame.K_SPACE]:    
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_shot > self.shoot_delay:
+            #self.alive = False
+            b = Bullet(imageBullet, self.rect.x, self.rect.y)
+            all_active_sprites.add(b)
+            bullets.add(b)
+            self.last_shot = pygame.time.get_ticks()
     
  
      if freio == True:
@@ -117,19 +149,14 @@ while not done:
     
     
     
-    prob = int(random.random() * 12)
+    prob = int(random.random() * 1)
     if prob < 1:
-         enemies.append(Enemy(imageEnemy))
+        all_active_sprites.add(Enemy(imageEnemy))
+        enemies.add(Enemy(imageEnemy))
 
     
     for enemy in enemies:
-        if enemy.image_rect.y > height:
-            enemy.alive = False
-
-        if enemy.alive is True:
-            enemy.image_rect.y+=3
-            screen.blit(enemy.image,enemy.image_rect)
-        else:
+        if enemy.alive == False:
             enemies.remove(enemy)
 
     
