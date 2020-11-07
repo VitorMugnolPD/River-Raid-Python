@@ -30,6 +30,7 @@ screen = pygame.display.set_mode((width, height))
 
 enemies=pygame.sprite.Group()
 bullets=pygame.sprite.Group()
+player_group=pygame.sprite.Group()
 done = False
 
 clock = pygame.time.Clock()
@@ -43,9 +44,10 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self):
         if self.rect.y > height:
-            self.alive = False
+            self.kill()
         if self.alive == True:
-            self.rect.y -= 9
+            self.rect.y -= 9      
+        pygame.sprite.groupcollide(enemies, bullets, True, pygame.sprite.collide_circle)
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,image):
@@ -54,16 +56,17 @@ class Enemy(pygame.sprite.Sprite):
         self.rect= image.get_rect(topleft=(random.randrange(80,490),0))
         self.alive = True
 
+
     def update(self):
         if self.rect.y > height:
-            self.alive = False
+            self.kill()
 
-        if self.alive is True:
+        if self.alive == True:
             self.rect.y+=1
-            #screen.blit(enemy.image,enemy.rect)
+            
+        pygame.sprite.groupcollide(player_group,enemies,True,False)
 
-    #def update(self):
-        #wdwwdw
+    
 
 class Player(pygame.sprite.Sprite):
     def __init__(self,playerImage,shotImage):
@@ -88,15 +91,13 @@ class Player(pygame.sprite.Sprite):
      if pressed[pygame.K_DOWN]:
         freio = True
      if pressed[pygame.K_LEFT]:
-        self.rect.x -= 3
+        self.rect.x -= 4
      if pressed[pygame.K_RIGHT]:
-        self.rect.x += 3
+        self.rect.x += 4
      if pressed[pygame.K_SPACE]:    
         current_time = pygame.time.get_ticks()
         if current_time - self.last_shot > self.shoot_delay:
-            #self.alive = False
             b = Bullet(imageBullet, self.rect.x, self.rect.y)
-            all_active_sprites.add(b)
             bullets.add(b)
             self.last_shot = pygame.time.get_ticks()
     
@@ -117,25 +118,8 @@ class Player(pygame.sprite.Sprite):
          self.rect.y -= 1
 
     
-
-
-
-def shoot(m, n):
-    i = m
-    j = n
-    shooting = True
-    while shooting == True:
-        screen.blit(imageBullet,(i, j))
-        j -= 1
-        time.sleep(0.0007)
-        if j == 0:
-            shooting = False
-
-
-
 player = Player(imagePlane,imageBullet)
-all_active_sprites = pygame.sprite.Group()
-all_active_sprites.add(player)
+player_group.add(player)
 
 
 while not done:
@@ -147,21 +131,21 @@ while not done:
    
     
     
-    
-    
-    prob = int(random.random() * 1)
+    prob = int(random.random() * 100)
     if prob < 1:
-        all_active_sprites.add(Enemy(imageEnemy))
         enemies.add(Enemy(imageEnemy))
 
-    
-    for enemy in enemies:
-        if enemy.alive == False:
-            enemies.remove(enemy)
 
     
     
-    all_active_sprites.draw(screen)
-    all_active_sprites.update()
+
+    bullets.draw(screen)
+    bullets.update()
+    enemies.draw(screen)
+    enemies.update()
+    player_group.draw(screen)
+    player.update()
+   
+
     pygame.display.update()
     clock.tick(60)
