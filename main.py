@@ -95,9 +95,13 @@ while not done:
             explosoes.add(explosao)
             print(explosoes)
             #mixer.init() 
-            mixer.music.load("explosion.mp3") 
-            mixer.music.set_volume(0.03) 
-            mixer.music.play() 
+            #mixer.music.load("explosion.mp3") 
+            #mixer.music.set_volume(0.03) 
+            #mixer.music.play() 
+            #pygame.mixer.Sound.play("explosion.wav")
+            s = pygame.mixer.Sound("explosion.wav")
+            s.set_volume(0.05)
+            s.play()
         for player in player_group:
             player.points += 10
 
@@ -109,9 +113,13 @@ while not done:
         for player in player_group:
             if player.fuel_left <= 9960:
                 player.fuel_left += 40
-            mixer.music.load("fuel.mp3") 
-            mixer.music.set_volume(0.03) 
-            mixer.music.play() 
+            #mixer.music.load("fuel.mp3") 
+            #mixer.music.set_volume(0.03) 
+            #mixer.music.play() 
+            #pygame.mixer.Sound.play("fuel.wav")
+            s = pygame.mixer.Sound("fuel.wav")
+            s.set_volume(0.05)
+            s.play()
 
 
     pygame.display.update()
