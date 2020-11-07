@@ -58,6 +58,8 @@ clock = pygame.time.Clock()
 player = Player(imagePlane, imageBullet,height,width,bullets)
 player_group.add(player)
 
+font = pygame.font.Font('freesansbold.ttf', 12) 
+
 mixer.init() 
 mixer.music.load("soundtrack.mp3") 
 mixer.music.set_volume(0.03) 
@@ -97,23 +99,23 @@ while not done:
     hit = pygame.sprite.groupcollide(player_group, enemies, True, False)
     if hit:
         player.alive = False
-        #print("perdeste")
-        #print(player.points)
 
-    pygame.sprite.groupcollide(fuels, bullets, True, pygame.sprite.collide_circle)
+    fuelhit = pygame.sprite.groupcollide(fuels, bullets, True, pygame.sprite.collide_circle)
+    for bullet in fuelhit:
+        player.points += 8
+        explosao = Explosion('explosion.png', 7, bullet.rect.x, bullet.rect.y)
+        explosoes.add(explosao)
+        s = pygame.mixer.Sound("explosion.wav")
+        s.set_volume(0.07)
+        s.play()
 
     hit = pygame.sprite.groupcollide(bullets, enemies,False,True, pygame.sprite.collide_circle)
     if hit:
         for bullet in hit:
             explosao = Explosion('explosion.png', 7, bullet.rect.x, bullet.rect.y)
             explosoes.add(explosao)
-            #mixer.init() 
-            #mixer.music.load("explosion.mp3") 
-            #mixer.music.set_volume(0.03) 
-            #mixer.music.play() 
-            #pygame.mixer.Sound.play("explosion.wav")
             s = pygame.mixer.Sound("explosion.wav")
-            s.set_volume(0.05)
+            s.set_volume(0.07)
             s.play()
         for player in player_group:
             player.points += 10
@@ -126,13 +128,19 @@ while not done:
         for player in player_group:
             if player.fuel_left <= 9960:
                 player.fuel_left += 40
-            #mixer.music.load("fuel.mp3") 
-            #mixer.music.set_volume(0.03) 
-            #mixer.music.play() 
-            #pygame.mixer.Sound.play("fuel.wav")
             s = pygame.mixer.Sound("fuel.wav")
             s.set_volume(0.03)
             s.play()
+
+    text = font.render('Pontos: ' + str(player.points), True, (0,0,0)) 
+    textRect = text.get_rect() 
+    screen.blit(text, textRect)
+
+    fuelPercent = int((player.fuel_left / 10000) * 100)
+    text2 = font.render('Gasolina: ' + str(fuelPercent) + '%', True, (0,0,0))
+    text2Rect = text.get_rect()
+    text2Rect.y = 20
+    screen.blit(text2, text2Rect)
 
 
     pygame.display.update()

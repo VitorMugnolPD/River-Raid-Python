@@ -48,7 +48,8 @@ class Player(pygame.sprite.Sprite):
         if pressed[pygame.K_RIGHT]:
             self.rect.x += 4
         if pressed[pygame.K_SPACE]:
-            self.shoot()
+            if self.alive:
+                self.shoot()
 
         if freio == True:
             self.rect.y += 1
@@ -65,11 +66,9 @@ class Player(pygame.sprite.Sprite):
         if self.rect.y > 320:
             self.rect.y -= 1
 
-        self.fuel_left -= 10
-        if self.alive:
-            print(self.fuel_left)
+        if self.fuel_left >= 0:
+            self.fuel_left -= 10
 
         if self.fuel_left <= 0:
-            print("perdeste")
-            print(self.points)
             self.alive = False
+            self.kill()
