@@ -106,10 +106,10 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += 1
 
      if self.rect.x < 75:
-         self.rect.x += 3
+         self.rect.x += 4
 
      if self.rect.x > 490:
-           self.rect.x -= 3
+           self.rect.x -= 4
 
      if self.rect.y < 0:
         self.rect.y += 3
