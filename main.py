@@ -8,12 +8,14 @@ import random
 from fuel import Fuel
 from enemy import Enemy
 from player import Player
+from decoration import Decoration
 from explosion import Explosion
 
 
 imagePlane = pygame.image.load('plane.png')
 if imagePlane == None:
     print("Erro ao carregar imagem")
+
 
 imageFuel = pygame.image.load('fuel.png')
 if imageFuel == None:
@@ -26,6 +28,10 @@ if imageBullet == None:
 imageEnemy = pygame.image.load('enemy1.png')
 if imageEnemy == None:
     print("Erro ao carregar imagem")
+
+imageDecoration = pygame.image.load('decoration.png')
+if imageDecoration == None:
+        print("Erro ao carregar imagem")
 
 background = pygame.image.load('background.png')
 if background == None:
@@ -44,6 +50,7 @@ bullets = pygame.sprite.Group()
 fuels = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 explosoes = pygame.sprite.Group()
+decoracoes = pygame.sprite.Group()
 
 done = False
 clock = pygame.time.Clock()
@@ -63,6 +70,11 @@ while not done:
 
     screen.blit(background, background_rect)
     bullets = player.get_shots()
+
+    prob = int (random.random()*40)
+    if prob<1:
+        decoracoes.add(Decoration(imageDecoration,height,width))
+
     prob = int(random.random() * 250)
     if prob < (1 + player.points / 100):
         enemies.add(Enemy(imageEnemy,height))
@@ -77,6 +89,8 @@ while not done:
     bullets.update()
     enemies.draw(screen)
     enemies.update()
+    decoracoes.draw(screen)
+    decoracoes.update()
     player_group.draw(screen)
     player.update()
 
@@ -93,7 +107,6 @@ while not done:
         for bullet in hit:
             explosao = Explosion('explosion.png', 7, bullet.rect.x, bullet.rect.y)
             explosoes.add(explosao)
-            print(explosoes)
             #mixer.init() 
             #mixer.music.load("explosion.mp3") 
             #mixer.music.set_volume(0.03) 
@@ -118,7 +131,7 @@ while not done:
             #mixer.music.play() 
             #pygame.mixer.Sound.play("fuel.wav")
             s = pygame.mixer.Sound("fuel.wav")
-            s.set_volume(0.05)
+            s.set_volume(0.03)
             s.play()
 
 

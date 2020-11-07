@@ -66,10 +66,10 @@ class Player(pygame.sprite.Sprite):
             self.rect.y -= 1
 
         self.fuel_left -= 10
-        #if self.alive:
-           #print(self.fuel_left)
+        if self.alive:
+            print(self.fuel_left)
 
         if self.fuel_left <= 0:
-           #print("perdeste")
-           #print(self.points)
+            print("perdeste")
+            print(self.points)
             self.alive = False
