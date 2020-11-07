@@ -94,8 +94,12 @@ while not done:
             explosao = Explosion('explosion.png', 7, bullet.rect.x, bullet.rect.y)
             explosoes.add(explosao)
             print(explosoes)
+            #mixer.init() 
+            mixer.music.load("explosion.mp3") 
+            mixer.music.set_volume(0.03) 
+            mixer.music.play() 
         for player in player_group:
-             player.points += 10
+            player.points += 10
 
     explosoes.draw(screen)
     explosoes.update()
@@ -103,8 +107,11 @@ while not done:
     refuel = pygame.sprite.groupcollide(player_group, fuels, False, False)
     if refuel:
         for player in player_group:
-             if player.fuel_left <= 9960:
+            if player.fuel_left <= 9960:
                 player.fuel_left += 40
+            mixer.music.load("fuel.mp3") 
+            mixer.music.set_volume(0.03) 
+            mixer.music.play() 
 
 
     pygame.display.update()
