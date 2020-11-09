@@ -44,6 +44,7 @@ pygame.init()
 height = 380
 width = 600
 screen = pygame.display.set_mode((width, height))
+tela = 0  # 0 = menu, 1 = help, 2 = jogo, 3 = perdeu
 
 enemies = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
@@ -70,77 +71,185 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    screen.blit(background, background_rect)
-    bullets = player.get_shots()
+    if tela == 0:
+        text = font.render('RIVER RAID', True, (255,0,0)) 
+        textRect = text.get_rect() 
+        screen.blit(text, textRect)
 
-    prob = int (random.random()*40)
-    if prob<1:
-        decoracoes.add(Decoration(imageDecoration,height,width))
+        text2 = font.render('JOGAR - ENTER', True, (255,0,0)) 
+        text2Rect = text2.get_rect() 
+        text2Rect.y = 20
+        screen.blit(text2, text2Rect)
 
-    prob = int(random.random() * 250)
-    if prob < (1 + player.points / 100):
-        enemies.add(Enemy(imageEnemy,height))
+        text3 = font.render('AJUDA - H', True, (255,0,0)) 
+        text3Rect = text3.get_rect() 
+        text3Rect.y = 40
+        screen.blit(text3, text3Rect)
 
-    prob2 = int(random.random() * (100 + player.points / 20))
-    if prob2 < 1:
-        fuels.add(Fuel(imageFuel,height))
+        pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_KP_ENTER]:
+            tela = 2
+        if pressed[pygame.K_h]:
+            screen.fill((0,0,0))
+            tela = 1
 
-    fuels.draw(screen)
-    fuels.update()
-    bullets.draw(screen)
-    bullets.update()
-    enemies.draw(screen)
-    enemies.update()
-    decoracoes.draw(screen)
-    decoracoes.update()
-    player_group.draw(screen)
-    player.update()
+    if tela == 1:
+        text = font.render('ESQUERDA - SETA PARA ESQUERDA', True, (255,0,0)) 
+        textRect = text.get_rect() 
+        screen.blit(text, textRect)
 
-    hit = pygame.sprite.groupcollide(player_group, enemies, True, False)
-    if hit:
-        player.alive = False
+        text2 = font.render('DIREITA - SETA PARA DIREITA', True, (255,0,0)) 
+        text2Rect = text2.get_rect() 
+        text2Rect.y = 20
+        screen.blit(text2, text2Rect)
 
-    fuelhit = pygame.sprite.groupcollide(fuels, bullets, True, pygame.sprite.collide_circle)
-    for bullet in fuelhit:
-        player.points += 8
-        explosao = Explosion('explosion.png', 7, bullet.rect.x, bullet.rect.y)
-        explosoes.add(explosao)
-        s = pygame.mixer.Sound("explosion.wav")
-        s.set_volume(0.07)
-        s.play()
+        text3 = font.render('TURBO - SETA PARA CIMA', True, (255,0,0)) 
+        text3Rect = text3.get_rect() 
+        text3Rect.y = 40
+        screen.blit(text3, text3Rect)
 
-    hit = pygame.sprite.groupcollide(bullets, enemies,False,True, pygame.sprite.collide_circle)
-    if hit:
-        for bullet in hit:
+        text4 = font.render('FREIO - SETA PARA BAIXO', True, (255,0,0)) 
+        text4Rect = text4.get_rect() 
+        text4Rect.y = 60
+        screen.blit(text4, text4Rect)
+
+        text5 = font.render('ATIRAR - ESPAÇO', True, (255,0,0)) 
+        text5Rect = text5.get_rect() 
+        text5Rect.y = 80
+        screen.blit(text5, text5Rect)
+
+        text6 = font.render('VOCÊ POSSUI TRÊS VIDAS', True, (255,0,0)) 
+        text6Rect = text6.get_rect() 
+        text6Rect.y = 100
+        screen.blit(text6, text6Rect)
+
+        text7 = font.render('DESVIE DOS HELICÓPTEROS E NÃO DEIXE A GASOLINA ACABAR!', True, (255,0,0)) 
+        text7Rect = text7.get_rect() 
+        text7Rect.y = 120
+        screen.blit(text7, text7Rect)
+
+        text8 = font.render('GANHE PONTOS DESTRUINDO HELICÓPTEROS E GASOLINA!', True, (255,0,0)) 
+        text8Rect = text8.get_rect() 
+        text8Rect.y = 140
+        screen.blit(text8, text8Rect)
+
+        text9 = font.render('VOLTAR PARA O MENU - BACKSPACE', True, (255,0,0)) 
+        text9Rect = text9.get_rect() 
+        text9Rect.y = 160
+        screen.blit(text9, text9Rect)
+
+        pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_BACKSPACE]:
+            screen.fill((0,0,0))
+            tela = 0
+
+    if tela == 3:
+        text = font.render('VOCÊ PERDEU TODAS AS SUAS VIDAS!!!', True, (255,0,0)) 
+        textRect = text.get_rect() 
+        screen.blit(text, textRect)
+
+        text2 = font.render('APERTE ESPAÇO PARA VOLTAR PARA O MENU', True, (255,0,0)) 
+        text2Rect = text2.get_rect() 
+        text2Rect.y = 20
+        screen.blit(text2, text2Rect)
+
+        pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_SPACE]:
+            screen.fill((0,0,0))
+            tela = 0
+
+    if tela == 2:
+        screen.blit(background, background_rect)
+        bullets = player.get_shots()
+
+        prob = int (random.random()*40)
+        if prob<1:
+            decoracoes.add(Decoration(imageDecoration,height,width))
+
+        prob = int(random.random() * 250)
+        if prob < (1 + player.points / 100):
+            enemies.add(Enemy(imageEnemy,height))
+
+        prob2 = int(random.random() * (100 + player.points / 20))
+        if prob2 < 1:
+            fuels.add(Fuel(imageFuel,height))
+
+        fuels.draw(screen)
+        fuels.update()
+        bullets.draw(screen)
+        bullets.update()
+        enemies.draw(screen)
+        enemies.update()
+        decoracoes.draw(screen)
+        decoracoes.update()
+        player_group.draw(screen)
+        player.update()
+
+        if player.alive == False:
+            screen.fill((0,0,0))
+            tela = 3
+            player = Player(imagePlane, imageBullet,height,width,bullets)
+            player_group.add(player)
+
+        hit = pygame.sprite.groupcollide(player_group, enemies, False, False)
+        if hit:
+            for enemy in enemies:
+                enemy.kill()
+            if player.lives > 0:
+                player.lives -= 1
+                player.rect.centerx = width / 2
+                player.rect.bottom = height - 30
+                player.fuel_left = 10000
+            if player.lives == 0:
+                player.alive = False
+                player.kill()
+
+        fuelhit = pygame.sprite.groupcollide(fuels, bullets, True, pygame.sprite.collide_circle)
+        for bullet in fuelhit:
+            player.points += 8
             explosao = Explosion('explosion.png', 7, bullet.rect.x, bullet.rect.y)
             explosoes.add(explosao)
             s = pygame.mixer.Sound("explosion.wav")
             s.set_volume(0.07)
             s.play()
-        for player in player_group:
-            player.points += 10
 
-    explosoes.draw(screen)
-    explosoes.update()
+        hit = pygame.sprite.groupcollide(bullets, enemies,False,True, pygame.sprite.collide_circle)
+        if hit:
+            for bullet in hit:
+                explosao = Explosion('explosion.png', 7, bullet.rect.x, bullet.rect.y)
+                explosoes.add(explosao)
+                s = pygame.mixer.Sound("explosion.wav")
+                s.set_volume(0.07)
+                s.play()
+            for player in player_group:
+                player.points += 10
 
-    refuel = pygame.sprite.groupcollide(player_group, fuels, False, False)
-    if refuel:
-        for player in player_group:
-            if player.fuel_left <= 9960:
-                player.fuel_left += 40
-            s = pygame.mixer.Sound("fuel.wav")
-            s.set_volume(0.03)
-            s.play()
+        explosoes.draw(screen)
+        explosoes.update()
 
-    text = font.render('Pontos: ' + str(player.points), True, (0,0,0)) 
-    textRect = text.get_rect() 
-    screen.blit(text, textRect)
+        refuel = pygame.sprite.groupcollide(player_group, fuels, False, False)
+        if refuel:
+            for player in player_group:
+                if player.fuel_left <= 9960:
+                    player.fuel_left += 40
+                s = pygame.mixer.Sound("fuel.wav")
+                s.set_volume(0.03)
+                s.play()
 
-    fuelPercent = int((player.fuel_left / 10000) * 100)
-    text2 = font.render('Gasolina: ' + str(fuelPercent) + '%', True, (0,0,0))
-    text2Rect = text.get_rect()
-    text2Rect.y = 20
-    screen.blit(text2, text2Rect)
+        text = font.render('Pontos: ' + str(player.points), True, (0,0,0)) 
+        textRect = text.get_rect() 
+        screen.blit(text, textRect)
+
+        fuelPercent = int((player.fuel_left / 10000) * 100)
+        text2 = font.render('Gasolina: ' + str(fuelPercent) + '%', True, (0,0,0))
+        text2Rect = text2.get_rect()
+        text2Rect.y = 20
+        screen.blit(text2, text2Rect)
+
+        text3 = font.render('Vidas: ' + str(player.lives), True, (0,0,0))
+        text3Rect = text3.get_rect()
+        text3Rect.y = 40
+        screen.blit(text3, text3Rect)
 
 
     pygame.display.update()

@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = playerImage.get_rect()
         self.alive = True
         self.points = 0
+        self.lives = 3
 
         self.bullets =pygame.sprite.Group()
         self.rect.centerx = width / 2
@@ -66,9 +67,15 @@ class Player(pygame.sprite.Sprite):
         if self.rect.y > 320:
             self.rect.y -= 1
 
-        if self.fuel_left >= 0:
+        if self.fuel_left >= 0 and self.alive:
             self.fuel_left -= 10
 
         if self.fuel_left <= 0:
-            self.alive = False
-            self.kill()
+            if self.lives > 0:
+                self.lives -= 1
+                self.rect.centerx = self.width / 2
+                self.rect.bottom = self.height - 30
+                self.fuel_left = 10000
+            if self.lives == 0:
+                self.alive = False
+                self.kill()
