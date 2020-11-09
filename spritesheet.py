@@ -5,6 +5,7 @@ class Spritesheet:
         self.filename = filename
         self.sprite_sheet = pygame.image.load(self.filename).convert()
 
+
     def get_sprite(self,x,y,w,h):
         sprite = pygame.Surface((w,h))
         sprite.set_colorkey((0,0,0)) 

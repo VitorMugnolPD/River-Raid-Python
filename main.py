@@ -10,7 +10,7 @@ from enemy import Enemy
 from player import Player
 from decoration import Decoration
 from explosion import Explosion
-
+from title import Title
 
 imagePlane = pygame.image.load('plane.png')
 if imagePlane == None:
@@ -37,6 +37,9 @@ background = pygame.image.load('background.png')
 if background == None:
     print("Erro ao carregar imagem")
 
+
+
+
 background_rect = background.get_rect()
 
 pygame.init()
@@ -53,6 +56,9 @@ player_group = pygame.sprite.Group()
 explosoes = pygame.sprite.Group()
 decoracoes = pygame.sprite.Group()
 
+titles = pygame.sprite.Group()
+titles.add(Title('title.png',24,140,20))
+
 done = False
 clock = pygame.time.Clock()
 
@@ -61,10 +67,7 @@ player_group.add(player)
 
 font = pygame.font.Font('freesansbold.ttf', 12) 
 
-mixer.init() 
-mixer.music.load("soundtrack.mp3") 
-mixer.music.set_volume(0.03) 
-mixer.music.play() 
+
 
 while not done:
     for event in pygame.event.get():
@@ -72,18 +75,18 @@ while not done:
             done = True
 
     if tela == 0:
-        text = font.render('RIVER RAID', True, (255,0,0)) 
-        textRect = text.get_rect() 
-        screen.blit(text, textRect)
+        for title in titles:
+            title.alive = True
+        screen.blit(background, background_rect)
+
 
         text2 = font.render('JOGAR - ENTER', True, (255,0,0)) 
-        text2Rect = text2.get_rect() 
-        text2Rect.y = 20
+        text2Rect = text2.get_rect(center =(280,150)) 
+
         screen.blit(text2, text2Rect)
 
         text3 = font.render('AJUDA - H', True, (255,0,0)) 
-        text3Rect = text3.get_rect() 
-        text3Rect.y = 40
+        text3Rect = text3.get_rect(center =(280,180)) 
         screen.blit(text3, text3Rect)
 
         pressed = pygame.key.get_pressed()
@@ -92,58 +95,71 @@ while not done:
         if pressed[pygame.K_h]:
             screen.fill((0,0,0))
             tela = 1
+        
+        titles.draw(screen)
+        titles.update()
+        
 
     if tela == 1:
+        for title in titles:
+            title.alive = True
+        screen.blit(background, background_rect)
+           
         text = font.render('ESQUERDA - SETA PARA ESQUERDA', True, (255,0,0)) 
-        textRect = text.get_rect() 
+        textRect = text.get_rect(center =(280,80)) 
         screen.blit(text, textRect)
 
         text2 = font.render('DIREITA - SETA PARA DIREITA', True, (255,0,0)) 
-        text2Rect = text2.get_rect() 
-        text2Rect.y = 20
+        text2Rect = text2.get_rect(center =(280,100)) 
+
         screen.blit(text2, text2Rect)
 
         text3 = font.render('TURBO - SETA PARA CIMA', True, (255,0,0)) 
-        text3Rect = text3.get_rect() 
-        text3Rect.y = 40
+        text3Rect = text3.get_rect(center =(280,120)) 
+
         screen.blit(text3, text3Rect)
 
         text4 = font.render('FREIO - SETA PARA BAIXO', True, (255,0,0)) 
-        text4Rect = text4.get_rect() 
-        text4Rect.y = 60
+        text4Rect = text4.get_rect(center =(280,140)) 
+
         screen.blit(text4, text4Rect)
 
         text5 = font.render('ATIRAR - ESPAÇO', True, (255,0,0)) 
-        text5Rect = text5.get_rect() 
-        text5Rect.y = 80
+        text5Rect = text5.get_rect(center =(280,160)) 
+
         screen.blit(text5, text5Rect)
 
         text6 = font.render('VOCÊ POSSUI TRÊS VIDAS', True, (255,0,0)) 
-        text6Rect = text6.get_rect() 
-        text6Rect.y = 100
+        text6Rect = text6.get_rect(center =(280,180)) 
+  
         screen.blit(text6, text6Rect)
 
         text7 = font.render('DESVIE DOS HELICÓPTEROS E NÃO DEIXE A GASOLINA ACABAR!', True, (255,0,0)) 
-        text7Rect = text7.get_rect() 
-        text7Rect.y = 120
+        text7Rect = text7.get_rect(center =(280,200)) 
+
         screen.blit(text7, text7Rect)
 
         text8 = font.render('GANHE PONTOS DESTRUINDO HELICÓPTEROS E GASOLINA!', True, (255,0,0)) 
-        text8Rect = text8.get_rect() 
-        text8Rect.y = 140
+        text8Rect = text8.get_rect(center =(280,240)) 
+
         screen.blit(text8, text8Rect)
 
         text9 = font.render('VOLTAR PARA O MENU - BACKSPACE', True, (255,0,0)) 
-        text9Rect = text9.get_rect() 
-        text9Rect.y = 160
+        text9Rect = text9.get_rect(center =(280,220)) 
+
         screen.blit(text9, text9Rect)
+
+        titles.draw(screen)
+        titles.update()
 
         pressed = pygame.key.get_pressed()
         if pressed[pygame.K_BACKSPACE]:
             screen.fill((0,0,0))
             tela = 0
+        
 
     if tela == 3:
+
         text = font.render('VOCÊ PERDEU TODAS AS SUAS VIDAS!!!', True, (255,0,0)) 
         textRect = text.get_rect() 
         screen.blit(text, textRect)
@@ -160,6 +176,11 @@ while not done:
 
     if tela == 2:
         screen.blit(background, background_rect)
+
+        mixer.init() 
+        mixer.music.load("soundtrack.mp3") 
+        mixer.music.set_volume(0.03) 
+        mixer.music.play() 
         bullets = player.get_shots()
 
         prob = int (random.random()*40)
