@@ -1,9 +1,9 @@
 import pygame
 
-class Spritesheet:
+class Spritesheet:  # classe para utilizar as sprites
     def __init__(self,filename):
-        self.filename = filename
-        self.sprite_sheet = pygame.image.load(self.filename).convert()
+        self.filename = filename  # arquivo
+        self.sprite_sheet = pygame.image.load(self.filename).convert()  # convertem o arquivo passado
 
 
     def get_sprite(self,x,y,w,h):

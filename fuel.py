@@ -1,17 +1,17 @@
 import pygame
 import random
 
-class Fuel(pygame.sprite.Sprite):
+class Fuel(pygame.sprite.Sprite):  # classe do combustível
     def __init__(self, image,height):
         pygame.sprite.Sprite.__init__(self)
-        self.height = height
-        self.image = image
-        self.rect = image.get_rect(topleft=(random.randrange(80, 490), 0))
+        self.height = height  # altura da tela
+        self.image = image  # imagem do combustível
+        self.rect = image.get_rect(topleft=(random.randrange(80, 490), 0))  # posição aleatória, dentro dos limites
         self.alive = True
 
     def update(self):
-        if self.rect.y > self.height:
-            self.kill()
+        if self.rect.y > self.height:  # se a altura estiver acima dos limites da tela, ela "morre"
+            self.kill()                #
 
-        if self.alive == True:
-            self.rect.y += 2
+        if self.alive == True:  # enquanto estiver "viva", sua altura se incrementa por 2
+            self.rect.y += 2    #
