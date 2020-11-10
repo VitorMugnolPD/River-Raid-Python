@@ -1,3 +1,7 @@
+# Integrantes:
+# Vicente Pinto Tomás Junior - RA 19199
+# Vitor Mugnol Estevam de Araujo - RA 19200
+
 from spritesheet import Spritesheet
 import pygame
 
